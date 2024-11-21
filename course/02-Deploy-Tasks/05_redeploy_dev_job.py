@@ -26,6 +26,25 @@
 
 # COMMAND ----------
 
+# Import pyspark utility functions
+from pyspark.sql import functions as F
+from libs.tblname import tblname
+from libs.catname import catname_from_path
+
+catalog = 'acme_transport_taxinyc.dev_karleinarbergstrom_featcourse11_c94b8749_revenue.revenue_per_inhabitant'
+from_name = 'rounded_amount'
+to_name = 'amount'
+
+# Load the table into a DataFrame
+df = spark.table(catalog)
+
+# Rename the column
+df = df.withColumnRenamed(from_name, to_name)
+
+df.write.mode('overwrite').format("delta").saveAsTable(catalog)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC
 # MAGIC ## Task: Redeploy without changes
